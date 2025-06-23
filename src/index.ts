@@ -3,12 +3,12 @@ import FeedGenerator from "./server";
 
 const run = async () => {
 	dotenv.config();
-	const hostname = maybeStr(process.env.FEEDGEN_HOSTNAME) ?? "example.com";
+	const hostname = maybeStr(process.env.HOSTNAME) ?? "example.com";
 	const serviceDid =
 		maybeStr(process.env.FEEDGEN_SERVICE_DID) ?? `did:web:${hostname}`;
 	const server = await FeedGenerator.create({
-		port: maybeInt(process.env.FEEDGEN_PORT ?? process.env.PORT) ?? 3000,
-		listenhost: maybeStr(process.env.FEEDGEN_LISTENHOST) ?? "localhost",
+		port: maybeInt(process.env.PORT) ?? 3000,
+		listenhost: maybeStr(process.env.HOST) ?? "localhost",
 		subscriptionEndpoint:
 			maybeStr(process.env.FEEDGEN_SUBSCRIPTION_ENDPOINT) ??
 			"wss://bsky.network",
