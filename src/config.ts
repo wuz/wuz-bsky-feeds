@@ -15,4 +15,5 @@ export type Config = {
   serviceDid: string
   publisherDid: string
   subscriptionReconnectDelay: number
+  postRetentionDays: number
 }

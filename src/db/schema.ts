@@ -12,13 +12,13 @@ export type Post = {
   replyParent: string | null
   replyRoot: string | null
   indexedAt: string
-  tag: string
 }
 
 export type PostTag = {
-  id: number
+  id: Generated<number>
   post_uri: string
   tag: string
+  indexedAt: string
 }
 
 export type SubState = {

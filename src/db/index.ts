@@ -15,6 +15,9 @@ export const createDb = async (): Promise<Database> => {
       user: process.env.PG_USER,
       password: process.env.PG_PASS,
       host: process.env.PG_HOST,
+      max: 20,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 5000,
     }),
   })
   return new Kysely<DatabaseSchema>({

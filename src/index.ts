@@ -16,6 +16,7 @@ const run = async () => {
 			maybeStr(process.env.FEEDGEN_PUBLISHER_DID) ?? "did:example:alice",
 		subscriptionReconnectDelay:
 			maybeInt(process.env.FEEDGEN_SUBSCRIPTION_RECONNECT_DELAY) ?? 3000,
+		postRetentionDays: maybeInt(process.env.POST_RETENTION_DAYS) ?? 7,
 		hostname,
 		serviceDid,
 	});

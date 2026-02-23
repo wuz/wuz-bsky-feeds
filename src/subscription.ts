@@ -3,7 +3,6 @@ import {
   isCommit,
 } from './lexicon/types/com/atproto/sync/subscribeRepos'
 import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
-import { uniqBy, omit } from 'lodash'
 import {
   filterAndMap as filterAndMapTTRPG,
   shortname as ttrpgShortname,
@@ -78,15 +77,13 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         .where('post_uri', 'in', postsToDelete)
         .execute()
     }
-    const createPosts = uniqBy(
-      [
-        ...ttrpgCreatePosts.map((post) => omit(post, 'hasVideo')),
-        ...critRoleSpoilerCreatePosts,
-        ...ttrpgIntroCreatePosts,
-        ...itchCreatePosts,
-      ],
-      'uri',
-    )
+    const seen = new Set<string>()
+    const createPosts = [
+      ...ttrpgCreatePosts.map(({ hasVideo: _hasVideo, ...post }) => post),
+      ...critRoleSpoilerCreatePosts,
+      ...ttrpgIntroCreatePosts,
+      ...itchCreatePosts,
+    ].filter((post) => !seen.has(post.uri) && seen.add(post.uri))
     const createPostTags = [
       ...ttrpgPostTags,
       ...critRoleSpoilerPostTags,

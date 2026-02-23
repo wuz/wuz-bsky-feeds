@@ -591,13 +591,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.17.17":
-  version: 4.17.17
-  resolution: "@types/lodash@npm:4.17.17"
-  checksum: 10c0/8e75df02a15f04d4322c5a503e4efd0e7a92470570ce80f17e9f11ce2b1f1a7c994009c9bcff39f07e0f9ffd8ccaff09b3598997c404b801abd5a7eee5a639dc
-  languageName: node
-  linkType: hard
-
 "@types/mime@npm:^1":
   version: 1.3.5
   resolution: "@types/mime@npm:1.3.5"
@@ -1282,14 +1275,12 @@ __metadata:
     "@atproto/syntax": "npm:^0.4.0"
     "@atproto/xrpc-server": "npm:^0.7.18"
     "@types/express": "npm:^4.17.22"
-    "@types/lodash": "npm:^4.17.17"
     "@types/node": "npm:^22.15.21"
     "@types/pg": "npm:^8.15.2"
     dotenv: "npm:^16.5.0"
     express: "npm:^4.21.2"
     inquirer: "npm:^12.6.3"
     kysely: "npm:^0.28.2"
-    lodash: "npm:^4.17.21"
     multiformats: "npm:^9.9.0"
     pg: "npm:^8.16.0"
     ts-node: "npm:^10.9.2"
@@ -1601,13 +1592,6 @@ __metadata:
   version: 0.28.2
   resolution: "kysely@npm:0.28.2"
   checksum: 10c0/66eccd19e6476a10f3b004835c4a966516968003075aa0c217db48ecd0f9679a2efa812f797063540cdb4e3e81fbf5afe876e1f7a08a1550e1fd99acc2a6dbb9
-  languageName: node
-  linkType: hard
-
-"lodash@npm:^4.17.21":
-  version: 4.17.21
-  resolution: "lodash@npm:4.17.21"
-  checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
   languageName: node
   linkType: hard
 
