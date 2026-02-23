@@ -3,9 +3,7 @@
 set -o errexit
 set -o nounset
 
-corepack enable
-
-corepack prepare yarn --activate
+corepack enable yarn
 
 yarn install --immutable
 
