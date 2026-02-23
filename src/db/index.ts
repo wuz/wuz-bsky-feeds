@@ -1,27 +1,24 @@
 import dotenv from 'dotenv'
-import { Kysely, Migrator, PostgresDialect } from 'kysely'
+import { Kysely, Migrator, SqliteDialect } from 'kysely'
 import { DatabaseSchema } from './schema'
 import { migrationProvider } from './migrations'
-import { Pool } from 'pg'
+import SqliteDatabase from 'better-sqlite3'
 import path from 'path'
+import fs from 'fs'
 
 const envPath = path.resolve(__dirname, '../../.env.local')
 dotenv.config({ path: envPath })
 
 export const createDb = async (): Promise<Database> => {
-  const pg_dialect = new PostgresDialect({
-    pool: new Pool({
-      database: process.env.PG_DATABASE,
-      user: process.env.PG_USER,
-      password: process.env.PG_PASS,
-      host: process.env.PG_HOST,
-      max: 20,
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 5000,
-    }),
-  })
+  const dbPath =
+    process.env.DATABASE_PATH ??
+    path.resolve(__dirname, '../../data/feed.db')
+  fs.mkdirSync(path.dirname(dbPath), { recursive: true })
+  const sqlite = new SqliteDatabase(dbPath)
+  sqlite.pragma('journal_mode = WAL')
+  sqlite.pragma('foreign_keys = ON')
   return new Kysely<DatabaseSchema>({
-    dialect: pg_dialect,
+    dialect: new SqliteDialect({ database: sqlite }),
   })
 }
 

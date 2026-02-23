@@ -8,6 +8,9 @@ export const migrationProvider: MigrationProvider = {
   },
 }
 
+// Consolidated schema for SQLite.
+// SQLite does not support ALTER COLUMN or adding a PK via ALTER TABLE,
+// so the incremental Postgres migrations are combined here into the final schema.
 migrations['001'] = {
   async up(db: Kysely<unknown>) {
     await db.schema
@@ -23,30 +26,9 @@ migrations['001'] = {
       .addColumn('service', 'varchar(255)', (col) => col.primaryKey())
       .addColumn('cursor', 'integer', (col) => col.notNull())
       .execute()
-  },
-  async down(db: Kysely<unknown>) {
-    await db.schema.dropTable('post').execute()
-    await db.schema.dropTable('sub_state').execute()
-  },
-}
-
-migrations['002'] = {
-  async up(db: Kysely<unknown>) {
-    await db.schema
-      .alterTable('post')
-      .addColumn('tag', 'varchar(255)', (col) => col.notNull())
-      .execute()
-  },
-  async down(db: Kysely<unknown>) {
-    await db.schema.alterTable('post').dropColumn('tag').execute()
-  },
-}
-
-migrations['003'] = {
-  async up(db: Kysely<unknown>) {
-    await db.schema.alterTable('post').dropColumn('tag').execute()
     await db.schema
       .createTable('post_tag')
+      .addColumn('id', 'integer', (col) => col.primaryKey())
       .addColumn('post_uri', 'varchar(255)', (col) =>
         col.references('post.uri').onDelete('no action').notNull(),
       )
@@ -58,63 +40,6 @@ migrations['003'] = {
       .on('post_tag')
       .column('post_uri')
       .execute()
-  },
-  async down(db: Kysely<unknown>) {
-    await db.schema
-      .alterTable('post')
-      .addColumn('tag', 'varchar(255)', (col) => col.notNull())
-      .execute()
-    await db.schema.dropTable('post_tag').execute()
-  },
-}
-
-migrations['004'] = {
-  async up(db: Kysely<unknown>) {
-    await db.schema
-      .alterTable('post_tag')
-      .addColumn('id', 'serial', (col) => col.primaryKey())
-      .execute()
-  },
-  async down(db: Kysely<unknown>) {
-    await db.schema.alterTable('post_tag').dropColumn('id').execute()
-  },
-}
-
-migrations['005'] = {
-  async up(db: Kysely<unknown>) {
-    await db.schema
-      .alterTable('post_tag')
-      .alterColumn('id', (ac) => ac.setDataType('bigint'))
-      .execute()
-  },
-  async down(db: Kysely<unknown>) {
-    await db.schema
-      .alterTable('post_tag')
-      .alterColumn('id', (ac) => ac.setDataType('serial'))
-      .execute()
-  },
-}
-
-migrations['006'] = {
-  async up(db: Kysely<unknown>) {
-    await db.schema
-      .alterTable('sub_state')
-      .alterColumn('cursor', (ac) => ac.setDataType('bigint'))
-      .execute()
-  },
-  async down(db: Kysely<unknown>) {
-    await db.schema
-      .alterTable('sub_state')
-      .alterColumn('cursor', (ac) => ac.setDataType('integer'))
-      .execute()
-  },
-}
-
-migrations['007'] = {
-  async up(db: Kysely<unknown>) {
-    // Compound index for the primary feed query pattern:
-    // WHERE tag = ? ORDER BY indexedAt DESC
-    // (cid is on the post table, not post_tag, so it can't be included here)
     await db.schema
       .createIndex('post_tag_feed_index')
       .on('post_tag')
@@ -123,5 +48,9 @@ migrations['007'] = {
   },
   async down(db: Kysely<unknown>) {
     await db.schema.dropIndex('post_tag_feed_index').execute()
+    await db.schema.dropIndex('post_tag_id_index').execute()
+    await db.schema.dropTable('post_tag').execute()
+    await db.schema.dropTable('sub_state').execute()
+    await db.schema.dropTable('post').execute()
   },
 }

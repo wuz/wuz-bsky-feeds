@@ -12,6 +12,11 @@ primary_region = 'ord'
 [env]
   HOST = '0.0.0.0'
   PORT = '3000'
+  DATABASE_PATH = '/app/data/feed.db'
+
+[[mounts]]
+  source = 'feed_data'
+  destination = '/app/data'
 
 [http_service]
   internal_port = 3000

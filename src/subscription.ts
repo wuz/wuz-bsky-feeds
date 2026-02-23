@@ -96,7 +96,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       if (createPosts.length > 0) {
         await this.db
           .insertInto('post')
-          .onConflict((oc) => oc.constraint('post_pkey').doNothing())
+          .onConflict((oc) => oc.column('uri').doNothing())
           .values(createPosts)
           .execute()
       }
@@ -104,11 +104,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       console.error(err)
     }
     if (createPostTags.length > 0) {
-      await this.db
-        .insertInto('post_tag')
-        .onConflict((oc) => oc.constraint('post_tag_pkey').doNothing())
-        .values(createPostTags)
-        .execute()
+      await this.db.insertInto('post_tag').values(createPostTags).execute()
     }
   }
 }
