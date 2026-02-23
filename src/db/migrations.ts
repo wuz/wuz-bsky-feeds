@@ -113,11 +113,12 @@ migrations['006'] = {
 migrations['007'] = {
   async up(db: Kysely<unknown>) {
     // Compound index for the primary feed query pattern:
-    // WHERE tag = ? ORDER BY indexedAt DESC, cid DESC
+    // WHERE tag = ? ORDER BY indexedAt DESC
+    // (cid is on the post table, not post_tag, so it can't be included here)
     await db.schema
       .createIndex('post_tag_feed_index')
       .on('post_tag')
-      .columns(['tag', 'indexedAt desc', 'cid desc'])
+      .columns(['tag', 'indexedAt desc'])
       .execute()
   },
   async down(db: Kysely<unknown>) {
