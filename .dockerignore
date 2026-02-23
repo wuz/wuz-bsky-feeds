@@ -1,0 +1,9 @@
+node_modules
+dist
+.yarn
+.git
+*.md
+.env*
+flake.nix
+flake.lock
+nix/
